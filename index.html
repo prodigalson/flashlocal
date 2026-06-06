@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlashLocal</title>
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" data-i18n="eyebrow">Live nearby deals</p>
+          <h1>FlashLocal</h1>
+        </div>
+        <div class="header-actions">
+          <button class="icon-button" id="languageToggle" aria-label="Switch language">IT</button>
+          <button class="icon-button" id="merchantJump" aria-label="Merchant console">WA</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="location-band" aria-label="Location controls">
+          <div>
+            <span class="status-dot"></span>
+            <span id="locationText" data-i18n="locationFallback">Milan, Porta Venezia</span>
+          </div>
+          <button id="useLocation" data-i18n="useLocation">Use location</button>
+        </section>
+
+        <section class="hero-panel">
+          <div>
+            <p class="eyebrow" data-i18n="heroEyebrow">Valid right now</p>
+            <h2 data-i18n="heroTitle">Find the best deal before you choose where to go.</h2>
+            <p data-i18n="heroCopy">Restaurants, cafes, salons, gyms, and shops publish short-lived offers when they need demand now.</p>
+          </div>
+          <div class="hero-stat">
+            <strong id="liveCount">0</strong>
+            <span data-i18n="liveDeals">live deals</span>
+          </div>
+        </section>
+
+        <nav class="category-strip" aria-label="Deal filters">
+          <button class="chip active" data-category="all" data-i18n="all">All</button>
+          <button class="chip" data-category="food" data-i18n="food">Food</button>
+          <button class="chip" data-category="drinks" data-i18n="drinks">Drinks</button>
+          <button class="chip" data-category="beauty" data-i18n="beauty">Beauty</button>
+          <button class="chip" data-category="fitness" data-i18n="fitness">Fitness</button>
+          <button class="chip" data-category="shopping" data-i18n="shopping">Shopping</button>
+          <button class="chip" data-category="events" data-i18n="events">Events</button>
+        </nav>
+
+        <section class="controls-row">
+          <div class="segmented" aria-label="View mode">
+            <button class="active" data-view="list" data-i18n="list">List</button>
+            <button data-view="map" data-i18n="map">Map</button>
+          </div>
+          <label class="select-label">
+            <span data-i18n="sort">Sort</span>
+            <select id="sortSelect">
+              <option value="nearest" data-i18n="nearest">Nearest</option>
+              <option value="ending" data-i18n="endingSoon">Ending soon</option>
+              <option value="discount" data-i18n="biggest">Biggest discount</option>
+              <option value="newest" data-i18n="newest">Newest</option>
+            </select>
+          </label>
+        </section>
+
+        <section id="dealList" class="deal-list" aria-label="Nearby deals"></section>
+
+        <section id="mapView" class="map-view hidden" aria-label="Map view">
+          <div class="map-canvas" id="mapCanvas"></div>
+        </section>
+
+        <section class="merchant-console" id="merchantConsole">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow" data-i18n="merchantEyebrow">Merchant WhatsApp assistant</p>
+              <h2 data-i18n="merchantTitle">Publish a deal by chatting.</h2>
+            </div>
+            <span class="verified-pill" data-i18n="verified">Verified</span>
+          </div>
+
+          <div class="merchant-grid">
+            <div class="chat-panel">
+              <div class="chat-window" id="chatWindow" aria-live="polite"></div>
+              <form class="chat-form" id="chatForm">
+                <input id="chatInput" autocomplete="off" data-i18n-placeholder="chatPlaceholder" placeholder="Add 30% off pizza from 6pm to 8pm today" />
+                <button type="submit" data-i18n="send">Send</button>
+              </form>
+              <div class="quick-actions">
+                <button data-message="Add 30% off pizza from 6pm to 8pm today">Pizza</button>
+                <button data-message="We have 10 lunch menus left, 8 euro each until 3pm">Lunch</button>
+                <button data-message="Extend the aperitivo deal until 9pm">Extend</button>
+                <button data-message="Pause my current deal">Pause</button>
+              </div>
+            </div>
+
+            <aside class="structured-card">
+              <p class="eyebrow" data-i18n="structured">Structured preview</p>
+              <dl id="dealPreview"></dl>
+              <button id="publishDeal" data-i18n="publish">Publish deal</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="admin-strip">
+          <div>
+            <p class="eyebrow" data-i18n="adminEyebrow">Merchant onboarding</p>
+            <h2 data-i18n="adminTitle">Claim, verify, approve, then publish.</h2>
+          </div>
+          <div class="steps">
+            <span data-i18n="step1">Profile</span>
+            <span data-i18n="step2">WhatsApp code</span>
+            <span data-i18n="step3">Admin review</span>
+            <span data-i18n="step4">Live deals</span>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <template id="dealCardTemplate">
+      <article class="deal-card">
+        <img alt="" />
+        <div class="deal-body">
+          <div class="deal-topline">
+            <span class="category"></span>
+            <span class="distance"></span>
+          </div>
+          <h3></h3>
+          <p class="business"></p>
+          <p class="description"></p>
+          <div class="deal-meta">
+            <span class="discount"></span>
+            <span class="expires"></span>
+          </div>
+          <div class="deal-actions">
+            <button class="primary redeem" data-i18n="redeem">Redeem</button>
+            <button class="share" data-i18n="share">Share</button>
+            <button class="directions" data-i18n="directions">Directions</button>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
