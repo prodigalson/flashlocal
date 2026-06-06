@@ -63,6 +63,7 @@ main {
 }
 
 .topbar h1,
+.launch-copy h2,
 .hero-panel h2,
 .merchant-console h2,
 .admin-strip h2 {
@@ -137,6 +138,85 @@ main {
   border-radius: 50%;
   background: var(--green);
   box-shadow: 0 0 0 5px rgba(31, 122, 77, 0.12);
+}
+
+.launch-home {
+  display: grid;
+  gap: 14px;
+  padding: 22px 0 10px;
+}
+
+.launch-copy h2 {
+  max-width: 14ch;
+  font-size: clamp(2.55rem, 13vw, 4.4rem);
+  line-height: 0.92;
+}
+
+.launch-copy p:not(.eyebrow) {
+  max-width: 38ch;
+  margin: 14px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.home-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.home-actions button {
+  min-width: 0;
+  height: 46px;
+  border-radius: 8px;
+  font-weight: 900;
+}
+
+.home-actions button:first-child {
+  background: var(--green);
+  color: white;
+}
+
+.home-actions button:last-child {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.launch-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.launch-panel div {
+  min-width: 0;
+  padding: 12px 10px;
+}
+
+.launch-panel div + div {
+  border-left: 1px solid var(--line);
+}
+
+.launch-panel span {
+  display: block;
+  min-height: 28px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.launch-panel strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 1rem;
+  line-height: 1.05;
 }
 
 .hero-panel {
@@ -597,6 +677,16 @@ select {
 
   main {
     padding: 0 24px 32px;
+  }
+
+  .launch-home {
+    grid-template-columns: minmax(0, 1fr) 390px;
+    align-items: end;
+    padding-top: 38px;
+  }
+
+  .launch-copy h2 {
+    max-width: 16ch;
   }
 
   .hero-panel {

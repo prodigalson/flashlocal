@@ -1,6 +1,15 @@
 const translations = {
   en: {
     eyebrow: "Live nearby deals",
+    homeEyebrow: "Local commerce, live now",
+    homeTitle: "Fill empty tables, move spare inventory, and turn slow hours into traffic.",
+    homeCopy: "FlashLocal lets merchants publish last-minute offers through WhatsApp while nearby consumers discover deals that are active right now.",
+    browseDeals: "Browse deals",
+    merchantDemo: "Try merchant AI",
+    merchantMetric: "Merchant setup",
+    consumerMetric: "Consumer account",
+    marketMetric: "Launch market",
+    none: "None",
     locationFallback: "Milan, Porta Venezia",
     useLocation: "Use location",
     heroEyebrow: "Valid right now",
@@ -49,6 +58,15 @@ const translations = {
   },
   it: {
     eyebrow: "Offerte vicino a te",
+    homeEyebrow: "Commercio locale, live ora",
+    homeTitle: "Riempi tavoli vuoti, vendi scorte extra e trasforma le ore lente in traffico.",
+    homeCopy: "FlashLocal permette agli esercenti di pubblicare offerte last-minute via WhatsApp mentre i consumatori vicini scoprono deal attivi ora.",
+    browseDeals: "Sfoglia offerte",
+    merchantDemo: "Prova AI merchant",
+    merchantMetric: "Setup esercente",
+    consumerMetric: "Account cliente",
+    marketMetric: "Mercato lancio",
+    none: "Nessuno",
     locationFallback: "Milano, Porta Venezia",
     useLocation: "Usa posizione",
     heroEyebrow: "Valide ora",
@@ -454,6 +472,14 @@ document.querySelector("#languageToggle").addEventListener("click", () => {
 });
 
 document.querySelector("#merchantJump").addEventListener("click", () => {
+  document.querySelector("#merchantConsole").scrollIntoView({ behavior: "smooth" });
+});
+
+document.querySelector("#browseDeals").addEventListener("click", () => {
+  document.querySelector("#dealList").scrollIntoView({ behavior: "smooth" });
+});
+
+document.querySelector("#merchantDemo").addEventListener("click", () => {
   document.querySelector("#merchantConsole").scrollIntoView({ behavior: "smooth" });
 });
 
