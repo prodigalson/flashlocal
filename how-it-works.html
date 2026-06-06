@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How FlashLocal Works</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">How it works</p>
+          <h1>FlashLocal</h1>
+        </div>
+        <div class="header-actions">
+          <a class="nav-link" href="./index.html">Home</a>
+          <button class="icon-button" id="languageToggle" aria-label="Switch language">IT</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="how-hero">
+          <p class="eyebrow">Simple loop</p>
+          <h2>Post on WhatsApp. Show up nearby. Expire automatically.</h2>
+          <p>FlashLocal keeps the consumer experience clean while merchants manage deals through chat.</p>
+        </section>
+
+        <section class="how-grid" aria-label="FlashLocal workflow">
+          <article class="how-card">
+            <span>01</span>
+            <h3>Merchant sends a deal</h3>
+            <p>A restaurant, cafe, salon, gym, or shop messages the WhatsApp assistant with a last-minute offer.</p>
+          </article>
+          <article class="how-card">
+            <span>02</span>
+            <h3>Details are confirmed</h3>
+            <p>The assistant structures the offer, asks for missing fields, and confirms before anything goes live.</p>
+          </article>
+          <article class="how-card">
+            <span>03</span>
+            <h3>Nearby customers see it</h3>
+            <p>Consumers open the mobile site and see active deals by distance, category, and expiry time.</p>
+          </article>
+          <article class="how-card">
+            <span>04</span>
+            <h3>The deal disappears</h3>
+            <p>Every deal has an end time, so expired offers leave the feed automatically.</p>
+          </article>
+        </section>
+
+        <section class="merchant-console" id="merchantConsole">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow" data-i18n="merchantEyebrow">Merchant WhatsApp assistant</p>
+              <h2 data-i18n="merchantTitle">Publish a deal by chatting.</h2>
+            </div>
+            <span class="verified-pill" data-i18n="verified">Verified</span>
+          </div>
+
+          <div class="merchant-grid">
+            <div class="chat-panel">
+              <div class="chat-window" id="chatWindow" aria-live="polite"></div>
+              <form class="chat-form" id="chatForm">
+                <input id="chatInput" autocomplete="off" data-i18n-placeholder="chatPlaceholder" placeholder="Add 30% off pizza from 6pm to 8pm today" />
+                <button type="submit" data-i18n="send">Send</button>
+              </form>
+              <div class="quick-actions">
+                <button data-message="Add 30% off pizza from 6pm to 8pm today">Pizza</button>
+                <button data-message="We have 10 lunch menus left, 8 euro each until 3pm">Lunch</button>
+                <button data-message="Extend the aperitivo deal until 9pm">Extend</button>
+                <button data-message="Pause my current deal">Pause</button>
+              </div>
+            </div>
+
+            <aside class="structured-card">
+              <p class="eyebrow" data-i18n="structured">Structured preview</p>
+              <dl id="dealPreview"></dl>
+              <button id="publishDeal" data-i18n="publish">Publish deal</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="admin-strip">
+          <div>
+            <p class="eyebrow" data-i18n="adminEyebrow">Merchant onboarding</p>
+            <h2 data-i18n="adminTitle">Claim, verify, approve, then publish.</h2>
+          </div>
+          <div class="steps">
+            <span data-i18n="step1">Profile</span>
+            <span data-i18n="step2">WhatsApp code</span>
+            <span data-i18n="step3">Admin review</span>
+            <span data-i18n="step4">Live deals</span>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

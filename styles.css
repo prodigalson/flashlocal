@@ -28,7 +28,9 @@ body {
 
 button,
 input,
-select {
+select,
+.home-actions a,
+.nav-link {
   font: inherit;
 }
 
@@ -85,8 +87,23 @@ main {
 }
 
 .header-actions {
+  align-items: center;
   display: flex;
   gap: 8px;
+}
+
+.nav-link {
+  display: grid;
+  min-width: 54px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-decoration: none;
 }
 
 .icon-button {
@@ -166,11 +183,15 @@ main {
   margin-top: 18px;
 }
 
-.home-actions button {
+.home-actions button,
+.home-actions a {
+  display: grid;
   min-width: 0;
   height: 46px;
+  place-items: center;
   border-radius: 8px;
   font-weight: 900;
+  text-decoration: none;
 }
 
 .home-actions button:first-child {
@@ -178,7 +199,7 @@ main {
   color: white;
 }
 
-.home-actions button:last-child {
+.home-actions a {
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--ink);
@@ -231,6 +252,70 @@ main {
   background:
     linear-gradient(90deg, rgba(17, 55, 37, 0.96), rgba(17, 55, 37, 0.58)),
     url("https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1100&q=80") center/cover;
+}
+
+.how-hero {
+  padding: 34px 0 12px;
+}
+
+.how-hero h2 {
+  max-width: 14ch;
+  margin: 0;
+  font-size: clamp(2.45rem, 12vw, 4.2rem);
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+
+.how-hero p:not(.eyebrow),
+.backend-note p:not(.eyebrow) {
+  max-width: 40ch;
+  margin: 14px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.how-grid {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.how-card {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.how-card span {
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.how-card h3 {
+  margin: 8px 0 6px;
+  font-size: 1.1rem;
+}
+
+.how-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.38;
+}
+
+.backend-note {
+  margin: 18px 0 28px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.backend-note h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  letter-spacing: 0;
 }
 
 .hero-panel h2 {
@@ -687,6 +772,14 @@ select {
 
   .launch-copy h2 {
     max-width: 16ch;
+  }
+
+  .how-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .how-hero h2 {
+    max-width: 18ch;
   }
 
   .hero-panel {

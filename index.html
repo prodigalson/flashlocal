@@ -15,8 +15,8 @@
           <h1>FlashLocal</h1>
         </div>
         <div class="header-actions">
+          <a class="nav-link" href="./how-it-works.html">How</a>
           <button class="icon-button" id="languageToggle" aria-label="Switch language">IT</button>
-          <button class="icon-button" id="merchantJump" aria-label="Merchant console">WA</button>
         </div>
       </header>
 
@@ -28,21 +28,7 @@
             <p data-i18n="homeCopy">Businesses post deals on WhatsApp. Nearby customers find them instantly.</p>
             <div class="home-actions" aria-label="Primary paths">
               <button id="browseDeals" data-i18n="browseDeals">Browse deals</button>
-              <button id="merchantDemo" data-i18n="merchantDemo">Post a deal</button>
-            </div>
-          </div>
-          <div class="launch-panel" aria-label="FlashLocal live summary">
-            <div>
-              <span data-i18n="merchantMetric">Merchant setup</span>
-              <strong>&lt; 60 sec</strong>
-            </div>
-            <div>
-              <span data-i18n="consumerMetric">Consumer account</span>
-              <strong data-i18n="none">None</strong>
-            </div>
-            <div>
-              <span data-i18n="marketMetric">Launch market</span>
-              <strong>Milan</strong>
+              <a href="./how-it-works.html" data-i18n="howItWorks">How it works</a>
             </div>
           </div>
         </section>
@@ -99,50 +85,6 @@
           <div class="map-canvas" id="mapCanvas"></div>
         </section>
 
-        <section class="merchant-console" id="merchantConsole">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow" data-i18n="merchantEyebrow">Merchant WhatsApp assistant</p>
-              <h2 data-i18n="merchantTitle">Publish a deal by chatting.</h2>
-            </div>
-            <span class="verified-pill" data-i18n="verified">Verified</span>
-          </div>
-
-          <div class="merchant-grid">
-            <div class="chat-panel">
-              <div class="chat-window" id="chatWindow" aria-live="polite"></div>
-              <form class="chat-form" id="chatForm">
-                <input id="chatInput" autocomplete="off" data-i18n-placeholder="chatPlaceholder" placeholder="Add 30% off pizza from 6pm to 8pm today" />
-                <button type="submit" data-i18n="send">Send</button>
-              </form>
-              <div class="quick-actions">
-                <button data-message="Add 30% off pizza from 6pm to 8pm today">Pizza</button>
-                <button data-message="We have 10 lunch menus left, 8 euro each until 3pm">Lunch</button>
-                <button data-message="Extend the aperitivo deal until 9pm">Extend</button>
-                <button data-message="Pause my current deal">Pause</button>
-              </div>
-            </div>
-
-            <aside class="structured-card">
-              <p class="eyebrow" data-i18n="structured">Structured preview</p>
-              <dl id="dealPreview"></dl>
-              <button id="publishDeal" data-i18n="publish">Publish deal</button>
-            </aside>
-          </div>
-        </section>
-
-        <section class="admin-strip">
-          <div>
-            <p class="eyebrow" data-i18n="adminEyebrow">Merchant onboarding</p>
-            <h2 data-i18n="adminTitle">Claim, verify, approve, then publish.</h2>
-          </div>
-          <div class="steps">
-            <span data-i18n="step1">Profile</span>
-            <span data-i18n="step2">WhatsApp code</span>
-            <span data-i18n="step3">Admin review</span>
-            <span data-i18n="step4">Live deals</span>
-          </div>
-        </section>
       </main>
     </div>
 

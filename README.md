@@ -7,6 +7,7 @@ FlashLocal lets consumers discover nearby time-sensitive offers and gives mercha
 ## What is built
 
 - Mobile-first consumer deal feed
+- Separate `How it works` page for merchant, onboarding, and backend explanation
 - Category filters and sorting
 - List view and map view
 - Deal cards with expiry, distance, discount, share, directions, and redeem actions
@@ -44,6 +45,7 @@ http://127.0.0.1:4173
 ## Files
 
 - `index.html` - app shell and interface
+- `how-it-works.html` - merchant workflow and product explanation
 - `styles.css` - responsive mobile-first styling
 - `app.js` - deal data, filtering, map/list modes, localization, and merchant assistant simulator
 - `flashlocal-mobile.png` - mobile screenshot

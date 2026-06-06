@@ -5,6 +5,7 @@ const translations = {
     homeTitle: "Fill slow hours fast.",
     homeCopy: "Businesses post deals on WhatsApp. Nearby customers find them instantly.",
     browseDeals: "Browse deals",
+    howItWorks: "How it works",
     merchantDemo: "Post a deal",
     merchantMetric: "Merchant setup",
     consumerMetric: "Consumer account",
@@ -62,6 +63,7 @@ const translations = {
     homeTitle: "Riempi le ore lente.",
     homeCopy: "Gli esercenti pubblicano via WhatsApp. I clienti vicini le trovano subito.",
     browseDeals: "Sfoglia offerte",
+    howItWorks: "Come funziona",
     merchantDemo: "Pubblica offerta",
     merchantMetric: "Setup esercente",
     consumerMetric: "Account cliente",
@@ -273,6 +275,11 @@ const chatForm = document.querySelector("#chatForm");
 const chatInput = document.querySelector("#chatInput");
 const dealPreview = document.querySelector("#dealPreview");
 
+function on(selector, eventName, handler) {
+  const node = document.querySelector(selector);
+  if (node) node.addEventListener(eventName, handler);
+}
+
 function t(key) {
   return translations[state.language][key] || translations.en[key] || key;
 }
@@ -305,8 +312,9 @@ function parseDiscount(value) {
 }
 
 function renderDeals() {
+  if (!dealList || !template) return;
   const visible = filteredDeals();
-  liveCount.textContent = deals.length;
+  if (liveCount) liveCount.textContent = deals.length;
   dealList.innerHTML = "";
 
   if (!visible.length) {
@@ -339,6 +347,7 @@ function renderDeals() {
 }
 
 function renderMap() {
+  if (!mapCanvas) return;
   mapCanvas.innerHTML = "";
   filteredDeals().forEach((deal) => {
     const pin = document.createElement("button");
@@ -368,6 +377,7 @@ function openDirections(deal) {
 }
 
 function renderPreview() {
+  if (!dealPreview) return;
   const labels = previewLabels[state.language];
   const rows = [
     [labels[0], state.draft.title],
@@ -383,11 +393,13 @@ function renderPreview() {
 }
 
 function resetChatIntro() {
+  if (!chatWindow) return;
   chatWindow.innerHTML = "";
   addBubble(t("aiIntro"));
 }
 
 function addBubble(text, type = "ai") {
+  if (!chatWindow) return;
   const bubble = document.createElement("div");
   bubble.className = `bubble ${type}`;
   bubble.textContent = text;
@@ -463,7 +475,7 @@ function publishDraft() {
   addBubble(t("published"));
 }
 
-document.querySelector("#languageToggle").addEventListener("click", () => {
+on("#languageToggle", "click", () => {
   state.language = state.language === "en" ? "it" : "en";
   applyTranslations();
   renderPreview();
@@ -471,20 +483,13 @@ document.querySelector("#languageToggle").addEventListener("click", () => {
   resetChatIntro();
 });
 
-document.querySelector("#merchantJump").addEventListener("click", () => {
-  document.querySelector("#merchantConsole").scrollIntoView({ behavior: "smooth" });
+on("#browseDeals", "click", () => {
+  document.querySelector("#dealList")?.scrollIntoView({ behavior: "smooth" });
 });
 
-document.querySelector("#browseDeals").addEventListener("click", () => {
-  document.querySelector("#dealList").scrollIntoView({ behavior: "smooth" });
-});
-
-document.querySelector("#merchantDemo").addEventListener("click", () => {
-  document.querySelector("#merchantConsole").scrollIntoView({ behavior: "smooth" });
-});
-
-document.querySelector("#useLocation").addEventListener("click", () => {
-  document.querySelector("#locationText").textContent = t("locationGranted");
+on("#useLocation", "click", () => {
+  const locationText = document.querySelector("#locationText");
+  if (locationText) locationText.textContent = t("locationGranted");
 });
 
 document.querySelectorAll(".chip").forEach((chip) => {
@@ -508,29 +513,32 @@ document.querySelectorAll("[data-view]").forEach((button) => {
   });
 });
 
-document.querySelector("#sortSelect").addEventListener("change", (event) => {
+on("#sortSelect", "change", (event) => {
   state.sort = event.target.value;
   renderDeals();
   renderMap();
 });
 
-chatForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const message = chatInput.value.trim();
-  if (!message) return;
-  addBubble(message, "merchant");
-  chatInput.value = "";
-  parseMerchantMessage(message);
-});
+if (chatForm && chatInput) {
+  chatForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const message = chatInput.value.trim();
+    if (!message) return;
+    addBubble(message, "merchant");
+    chatInput.value = "";
+    parseMerchantMessage(message);
+  });
+}
 
 document.querySelectorAll(".quick-actions button").forEach((button) => {
   button.addEventListener("click", () => {
+    if (!chatInput || !chatForm) return;
     chatInput.value = button.dataset.message;
     chatForm.requestSubmit();
   });
 });
 
-document.querySelector("#publishDeal").addEventListener("click", publishDraft);
+on("#publishDeal", "click", publishDraft);
 
 applyTranslations();
 renderPreview();
