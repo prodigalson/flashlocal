@@ -49,6 +49,10 @@ const translations = {
     redeem: "Get code",
     share: "Share",
     directions: "Route",
+    mapsPreview: "Google Places",
+    ratingLabel: "rating",
+    openLabel: "Open now",
+    closedLabel: "Hours unknown",
     merchantEyebrow: "Merchant WhatsApp assistant",
     merchantTitle: "Publish a deal by chatting.",
     verified: "Verified",
@@ -126,6 +130,10 @@ const translations = {
     redeem: "Codice",
     share: "Invia",
     directions: "Vai",
+    mapsPreview: "Google Places",
+    ratingLabel: "valutazione",
+    openLabel: "Aperto ora",
+    closedLabel: "Orari non disponibili",
     merchantEyebrow: "Assistente WhatsApp per esercenti",
     merchantTitle: "Pubblica un'offerta via chat.",
     verified: "Verificato",
@@ -171,6 +179,14 @@ const deals = [
     views: 142,
     going: 18,
     address: "Via Lecco 7",
+    neighborhood: "Porta Venezia",
+    coordinates: { lat: 45.4784, lng: 9.2106 },
+    placeQuery: "Forno Rosso Via Lecco 7 Milano",
+    placeId: "",
+    placeRating: 4.6,
+    placeReviewCount: 318,
+    placeOpenNow: true,
+    placePhoto: "",
     image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80",
     x: 55,
     y: 36
@@ -190,6 +206,14 @@ const deals = [
     views: 91,
     going: 9,
     address: "Corso Buenos Aires 12",
+    neighborhood: "Porta Venezia",
+    coordinates: { lat: 45.4794, lng: 9.2094 },
+    placeQuery: "Cafe Luce Corso Buenos Aires 12 Milano",
+    placeId: "",
+    placeRating: 4.4,
+    placeReviewCount: 186,
+    placeOpenNow: true,
+    placePhoto: "",
     image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80",
     x: 33,
     y: 54
@@ -209,6 +233,14 @@ const deals = [
     views: 67,
     going: 4,
     address: "Via Melzo 20",
+    neighborhood: "Porta Venezia",
+    coordinates: { lat: 45.4778, lng: 9.2142 },
+    placeQuery: "Studio Forma Via Melzo 20 Milano",
+    placeId: "",
+    placeRating: 4.8,
+    placeReviewCount: 74,
+    placeOpenNow: true,
+    placePhoto: "",
     image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80",
     x: 68,
     y: 62
@@ -228,6 +260,14 @@ const deals = [
     views: 211,
     going: 31,
     address: "Piazza Vetra 3",
+    neighborhood: "Vetra",
+    coordinates: { lat: 45.4588, lng: 9.1804 },
+    placeQuery: "Bar Vetra Piazza Vetra 3 Milano",
+    placeId: "",
+    placeRating: 4.3,
+    placeReviewCount: 244,
+    placeOpenNow: true,
+    placePhoto: "",
     image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80",
     x: 43,
     y: 72
@@ -247,6 +287,14 @@ const deals = [
     views: 54,
     going: 5,
     address: "Via Tadino 5",
+    neighborhood: "Porta Venezia",
+    coordinates: { lat: 45.4789, lng: 9.2052 },
+    placeQuery: "Nami Beauty Via Tadino 5 Milano",
+    placeId: "",
+    placeRating: 4.7,
+    placeReviewCount: 96,
+    placeOpenNow: true,
+    placePhoto: "",
     image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80",
     x: 26,
     y: 31
@@ -266,6 +314,14 @@ const deals = [
     views: 38,
     going: 2,
     address: "Via Lambro 18",
+    neighborhood: "Porta Venezia",
+    coordinates: { lat: 45.4801, lng: 9.2154 },
+    placeQuery: "Officina Design Via Lambro 18 Milano",
+    placeId: "",
+    placeRating: 4.5,
+    placeReviewCount: 52,
+    placeOpenNow: true,
+    placePhoto: "",
     image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80",
     x: 72,
     y: 24
@@ -280,6 +336,8 @@ const categoryLabels = {
   shopping: { en: "Shopping", it: "Shopping" },
   events: { en: "Events", it: "Eventi" }
 };
+
+const placeCache = new Map();
 
 let state = {
   language: "en",
@@ -353,6 +411,82 @@ function dealTitle(deal) {
   return state.language === "it" && deal.titleIt ? deal.titleIt : deal.title;
 }
 
+function dealPlaceQuery(deal) {
+  return deal.placeQuery || `${deal.business} ${deal.address} Milan`;
+}
+
+function googleMapsUrl(deal) {
+  const query = dealPlaceQuery(deal);
+  const params = new URLSearchParams({ api: "1", query });
+  if (deal.placeId) params.set("query_place_id", deal.placeId);
+  return `https://www.google.com/maps/search/?${params.toString()}`;
+}
+
+function directionsUrl(deal) {
+  const params = new URLSearchParams({
+    api: "1",
+    destination: dealPlaceQuery(deal),
+    travelmode: "walking"
+  });
+  if (deal.placeId) params.set("destination_place_id", deal.placeId);
+  return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
+
+function placeSummary(deal) {
+  const rating = deal.placeRating ? `${deal.placeRating.toFixed(1)} ${t("ratingLabel")}` : t("closedLabel");
+  const count = deal.placeReviewCount ? ` · ${deal.placeReviewCount}` : "";
+  const hours = deal.placeOpenNow ? t("openLabel") : t("closedLabel");
+  return `${rating}${count} · ${hours}`;
+}
+
+function applyPlaceDetails(deal, details) {
+  if (!details) return;
+  if (details.place_id) deal.placeId = details.place_id;
+  if (details.rating) deal.placeRating = Number(details.rating);
+  if (details.user_ratings_total) deal.placeReviewCount = Number(details.user_ratings_total);
+  if (details.open_now !== undefined) deal.placeOpenNow = Boolean(details.open_now);
+  if (details.formatted_address) deal.address = details.formatted_address.replace(", 201", ", 201").split(", Italy")[0];
+  if (details.lat && details.lng) deal.coordinates = { lat: Number(details.lat), lng: Number(details.lng) };
+  if (details.photo_url) {
+    deal.placePhoto = details.photo_url;
+    deal.image = details.photo_url;
+  }
+}
+
+function hydratePlacePreview(deal, card) {
+  const query = dealPlaceQuery(deal);
+  if (!query || window.location.protocol === "file:") return;
+
+  if (placeCache.has(query)) {
+    applyPlaceDetails(deal, placeCache.get(query));
+    updatePlacePreview(card, deal);
+    return;
+  }
+
+  fetch(`/api/place-preview?query=${encodeURIComponent(query)}`)
+    .then((response) => (response.ok ? response.json() : null))
+    .then((details) => {
+      if (!details || details.error) return;
+      placeCache.set(query, details);
+      applyPlaceDetails(deal, details);
+      updatePlacePreview(card, deal);
+      renderMap();
+    })
+    .catch(() => {});
+}
+
+function updatePlacePreview(card, deal) {
+  const cardImage = card.querySelector("img");
+  const placeImage = card.querySelector(".place-photo");
+  const imageUrl = deal.placePhoto || deal.image;
+  cardImage.src = imageUrl;
+  placeImage.src = imageUrl;
+  placeImage.alt = `${deal.business} ${t("mapsPreview")}`;
+  card.querySelector(".place-source").textContent = t("mapsPreview");
+  card.querySelector(".place-rating").textContent = placeSummary(deal);
+  card.querySelector(".place-address").textContent = `${deal.address} · ${deal.neighborhood}`;
+}
+
 function localizeDraftValue(label, value) {
   if (state.language !== "it") return value;
 
@@ -404,13 +538,26 @@ function renderDeals() {
     card.querySelector(".description").textContent = state.language === "it" && deal.descriptionIt ? deal.descriptionIt : deal.description;
     card.querySelector(".discount").textContent = deal.discount;
     card.querySelector(".expires").textContent = `${deal.expiresIn} min`;
+    updatePlacePreview(card, deal);
     card.querySelector(".redeem").textContent = t("redeem");
     card.querySelector(".share").textContent = t("share");
     card.querySelector(".directions").textContent = t("directions");
     card.querySelector(".redeem").addEventListener("click", () => showRedemption(deal));
     card.querySelector(".share").addEventListener("click", () => shareDeal(deal));
     card.querySelector(".directions").addEventListener("click", () => openDirections(deal));
+    const placePreview = card.querySelector(".place-preview");
+    const openPlace = () => {
+      window.location.href = googleMapsUrl(deal);
+    };
+    placePreview.addEventListener("click", openPlace);
+    placePreview.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openPlace();
+      }
+    });
     dealList.append(card);
+    hydratePlacePreview(deal, card);
   });
 }
 
@@ -422,7 +569,7 @@ function renderMap() {
     pin.className = "pin";
     pin.style.left = `calc(${deal.x}% - 58px)`;
     pin.style.top = `calc(${deal.y}% - 28px)`;
-    pin.innerHTML = `<strong>${deal.business}</strong><span>${deal.discount} · ${deal.distance.toFixed(1)} km</span>`;
+    pin.innerHTML = `<strong>${deal.business}</strong><span>${deal.discount} · ${deal.distance.toFixed(1)} km · ${deal.placeRating.toFixed(1)}</span>`;
     pin.addEventListener("click", () => showRedemption(deal));
     mapCanvas.append(pin);
   });
@@ -438,15 +585,14 @@ function shareDeal(deal) {
   const shareUrl = new URL(window.location.origin + window.location.pathname);
   shareUrl.searchParams.set("deal", deal.id);
   const text = state.language === "it"
-    ? `${deal.business}: ${dealTitle(deal)}\n${deal.discount}. Scade tra ${deal.expiresIn} min.\n${shareUrl.toString()}`
-    : `${deal.business}: ${dealTitle(deal)}\n${deal.discount}. Ends in ${deal.expiresIn} min.\n${shareUrl.toString()}`;
+    ? `${deal.business}: ${dealTitle(deal)}\n${deal.discount}. Scade tra ${deal.expiresIn} min.\n${deal.address}\nMappa: ${googleMapsUrl(deal)}\n${shareUrl.toString()}`
+    : `${deal.business}: ${dealTitle(deal)}\n${deal.discount}. Ends in ${deal.expiresIn} min.\n${deal.address}\nMap: ${googleMapsUrl(deal)}\n${shareUrl.toString()}`;
   const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
   window.location.href = url;
 }
 
 function openDirections(deal) {
-  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${deal.business} ${deal.address} Milan`)}`;
-  window.location.href = url;
+  window.location.href = directionsUrl(deal);
 }
 
 function renderPreview() {
@@ -538,6 +684,14 @@ function publishDraft() {
     views: 0,
     going: 0,
     address: "Via Lecco 7",
+    neighborhood: "Porta Venezia",
+    coordinates: { lat: 45.4784, lng: 9.2106 },
+    placeQuery: "Forno Rosso Via Lecco 7 Milano",
+    placeId: "",
+    placeRating: 4.6,
+    placeReviewCount: 318,
+    placeOpenNow: true,
+    placePhoto: "",
     image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80",
     x: 57,
     y: 39

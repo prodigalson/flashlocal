@@ -59,6 +59,9 @@ Implemented today:
 - Map view
 - Sort controls
 - Deal cards with distance, expiry, category, discount, and actions
+- Google Places preview panel on each deal card
+- Google Maps search and walking directions links
+- Vercel Places proxy for live ratings, addresses, coordinates, and photos
 - WhatsApp share text with URL preview metadata
 - English and Italian language toggle
 - Merchant workflow page
@@ -137,6 +140,7 @@ Key UI areas:
 5. Customer chooses list or map view.
 6. Customer taps a deal.
 7. Customer gets a code, shares it, or opens route directions.
+8. Shared deals include a Google Maps link so recipients can navigate directly.
 
 ### Merchant Flow
 
@@ -367,8 +371,65 @@ Recommended fields:
 - `status`
 - `latitude`
 - `longitude`
+- `google_place_id`
+- `google_place_query`
+- `google_maps_url`
+- `place_rating`
+- `place_review_count`
+- `place_photo_url`
+- `place_open_now`
 - `created_at`
 - `updated_at`
+
+## Google Maps and Places
+
+FlashLocal now models Google Maps and Google Places as first-class location helpers.
+
+Current prototype behavior:
+
+- Each seeded deal includes a `placeQuery`, approximate coordinates, neighborhood, fallback rating, fallback review count, and fallback hours state.
+- Deal cards show a compact Google Places preview with image, rating, review count, open status, and address.
+- The `Route` action opens Google Maps walking directions through the Google Maps URL API.
+- The WhatsApp share text includes a Google Maps link so recipients can inspect or navigate to the merchant.
+- Map pins continue to use the prototype canvas map, but each deal now has production-shaped coordinate fields for a real map provider.
+
+Live Places enrichment:
+
+- `api/place-preview.js` is a Vercel serverless function.
+- It accepts `query` or `place_id`.
+- It uses Google Places Find Place and Place Details.
+- It returns `place_id`, name, formatted address, coordinates, rating, review count, open-now state, Google Maps URL, and a Places photo URL.
+- The browser calls `/api/place-preview?query=...` and updates the card preview when live data is available.
+- If the API key is missing or Google Places is unavailable, the static fallback data remains visible.
+
+Required production environment variable:
+
+```text
+GOOGLE_MAPS_API_KEY
+```
+
+Alternative accepted name:
+
+```text
+GOOGLE_PLACES_API_KEY
+```
+
+Recommended Google API configuration:
+
+- Enable Places API.
+- Restrict the key by server or deployment environment where possible.
+- Keep this implementation server-side so the production key is not exposed in the browser.
+- Cache Places responses, because ratings, photos, and opening hours do not need to refresh on every page load.
+- Store confirmed `google_place_id` on the merchant profile after onboarding.
+
+Production merchant onboarding flow:
+
+1. Merchant submits business name and address.
+2. Backend searches Google Places by text query.
+3. Merchant or admin selects the correct Place result.
+4. Backend stores `google_place_id`, coordinates, formatted address, and Google Maps URL.
+5. Deal cards use live Places photos when available.
+6. FlashLocal falls back to category imagery when Places has no suitable photo.
 
 ### Redemption
 
@@ -518,6 +579,8 @@ Current QA result:
 - Italian merchant preview uses localized values.
 - Share opens WhatsApp URL.
 - Directions opens Google Maps URL.
+- Google Places preview panels render on deal cards.
+- Places proxy returns a safe missing-key fallback when no Google key is configured.
 
 ## Design Review Status
 
@@ -585,6 +648,8 @@ https://github.com/prodigalson/flashlocal.git
 
 ```text
 .
+├── api/
+│   └── place-preview.js
 ├── README.md
 ├── app.js
 ├── how-it-works.html
