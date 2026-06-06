@@ -54,6 +54,10 @@ const translations = {
     structured: "Structured preview",
     publish: "Publish deal",
     send: "Send",
+    quickPizza: "Pizza",
+    quickLunch: "Lunch",
+    quickExtend: "Extend",
+    quickPause: "Pause",
     chatPlaceholder: "Add 30% off pizza from 6pm to 8pm today",
     adminEyebrow: "Merchant onboarding",
     adminTitle: "Claim, verify, approve, then publish.",
@@ -126,12 +130,16 @@ const translations = {
     structured: "Anteprima strutturata",
     publish: "Pubblica offerta",
     send: "Invia",
+    quickPizza: "Pizza",
+    quickLunch: "Pranzo",
+    quickExtend: "Estendi",
+    quickPause: "Pausa",
     chatPlaceholder: "Aggiungi 30% sulla pizza dalle 18 alle 20 oggi",
     adminEyebrow: "Onboarding esercente",
     adminTitle: "Profilo, verifica, approvazione, pubblicazione.",
     step1: "Profilo",
     step2: "Codice WhatsApp",
-    step3: "Review admin",
+    step3: "Revisione admin",
     step4: "Offerte live",
     viewed: "visite oggi",
     going: "interessati",
@@ -339,6 +347,36 @@ function parseDiscount(value) {
   return match ? Number(match[0]) : 0;
 }
 
+function dealTitle(deal) {
+  return state.language === "it" && deal.titleIt ? deal.titleIt : deal.title;
+}
+
+function localizeDraftValue(label, value) {
+  if (state.language !== "it") return value;
+
+  const replacements = {
+    "30% off pizza": "30% sulla pizza",
+    "10 lunch menus left": "10 menu pranzo rimasti",
+    "Extended aperitivo deal": "Offerta aperitivo estesa",
+    "Last-minute local offer": "Offerta locale last-minute",
+    "Food": "Cibo",
+    "Drinks": "Drink",
+    "Today, 6pm to 8pm": "Oggi, dalle 18 alle 20",
+    "Today until 9pm": "Oggi fino alle 21",
+    "Today until 10pm": "Oggi fino alle 22",
+    "Today, needs end time": "Oggi, orario finale da confermare",
+    "No limit": "Nessun limite",
+    "Show code FLASH30": "Mostra codice FLASH30",
+    "Dine-in only": "Solo sul posto",
+    "Merchant confirms before publishing": "L'esercente conferma prima della pubblicazione",
+    "Discount pending": "Sconto da confermare"
+  };
+
+  if (replacements[value]) return replacements[value];
+  if (label === "Quantity" && value.endsWith(" available")) return `${value.replace(" available", "")} disponibili`;
+  return value;
+}
+
 function renderDeals() {
   if (!dealList || !template) return;
   const visible = filteredDeals();
@@ -359,7 +397,7 @@ function renderDeals() {
     card.querySelector("img").alt = deal.business;
     card.querySelector(".category").textContent = categoryLabels[deal.category][state.language];
     card.querySelector(".distance").textContent = `${deal.distance.toFixed(1)} km`;
-    card.querySelector("h3").textContent = state.language === "it" && deal.titleIt ? deal.titleIt : deal.title;
+    card.querySelector("h3").textContent = dealTitle(deal);
     card.querySelector(".business").textContent = deal.business;
     card.querySelector(".description").textContent = state.language === "it" && deal.descriptionIt ? deal.descriptionIt : deal.description;
     card.querySelector(".discount").textContent = deal.discount;
@@ -390,32 +428,33 @@ function renderMap() {
 
 function showRedemption(deal) {
   const code = deal.business.split(" ")[0].toUpperCase().replace(/[^A-Z]/g, "").slice(0, 5) || "FLASH";
-  alert(`${deal.title}\n${deal.address}\nCode: ${code}${deal.id}`);
+  const codeLabel = state.language === "it" ? "Codice" : "Code";
+  alert(`${dealTitle(deal)}\n${deal.address}\n${codeLabel}: ${code}${deal.id}`);
 }
 
 function shareDeal(deal) {
-  const text = `${deal.business}: ${deal.title} (${deal.discount})`;
+  const text = `${deal.business}: ${dealTitle(deal)} (${deal.discount})`;
   const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.location.href = url;
 }
 
 function openDirections(deal) {
   const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${deal.business} ${deal.address} Milan`)}`;
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.location.href = url;
 }
 
 function renderPreview() {
   if (!dealPreview) return;
   const labels = previewLabels[state.language];
   const rows = [
-    [labels[0], state.draft.title],
-    [labels[1], state.draft.price],
-    [labels[2], state.draft.category],
-    [labels[3], state.draft.valid],
-    [labels[4], state.draft.quantity],
-    [labels[5], state.draft.redemption],
+    [labels[0], localizeDraftValue("Title", state.draft.title)],
+    [labels[1], localizeDraftValue("Discount", state.draft.price)],
+    [labels[2], localizeDraftValue("Category", state.draft.category)],
+    [labels[3], localizeDraftValue("Valid", state.draft.valid)],
+    [labels[4], localizeDraftValue("Quantity", state.draft.quantity)],
+    [labels[5], localizeDraftValue("Redemption", state.draft.redemption)],
     [labels[6], state.draft.location],
-    [labels[7], state.draft.terms]
+    [labels[7], localizeDraftValue("Terms", state.draft.terms)]
   ];
   dealPreview.innerHTML = rows.map(([key, value]) => `<dt>${key}</dt><dd>${value}</dd>`).join("");
 }
