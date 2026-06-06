@@ -3,7 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FlashLocal</title>
+    <title>FlashLocal - Live nearby deals</title>
+    <meta name="description" content="Find last-minute local deals nearby. Open now, ending soon, ready to redeem." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlashLocal" />
+    <meta property="og:title" content="FlashLocal - Live nearby deals" />
+    <meta property="og:description" content="Find last-minute local deals nearby. Open now, ending soon, ready to redeem." />
+    <meta property="og:url" content="https://flashlocal-six.vercel.app/" />
+    <meta property="og:image" content="https://flashlocal-six.vercel.app/whatsapp-preview.png" />
+    <meta property="og:image:secure_url" content="https://flashlocal-six.vercel.app/whatsapp-preview.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FlashLocal preview showing live local deals nearby." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FlashLocal - Live nearby deals" />
+    <meta name="twitter:description" content="Find last-minute local deals nearby. Open now, ending soon, ready to redeem." />
+    <meta name="twitter:image" content="https://flashlocal-six.vercel.app/whatsapp-preview.png" />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -27,8 +43,8 @@
             <h2 data-i18n="homeTitle">Fill slow hours fast.</h2>
             <p data-i18n="homeCopy">Businesses post deals on WhatsApp. Nearby customers find them instantly.</p>
             <div class="home-actions" aria-label="Primary paths">
-              <button id="browseDeals" data-i18n="browseDeals">Browse deals</button>
-              <a href="./how-it-works.html" data-i18n="howItWorks">How it works</a>
+              <button id="browseDeals" data-i18n="browseDeals">See deals</button>
+              <a href="./how-it-works.html" data-i18n="howItWorks">For merchants</a>
             </div>
           </div>
           <div class="launch-proof" aria-label="Deal feed status">
@@ -43,7 +59,7 @@
             <span class="status-dot"></span>
             <span id="locationText" data-i18n="locationFallback">Milan, Porta Venezia</span>
           </div>
-          <button id="useLocation" data-i18n="useLocation">Use location</button>
+          <button id="useLocation" data-i18n="useLocation">Near me</button>
         </section>
 
         <nav class="category-strip" aria-label="Deal filters">
@@ -97,9 +113,9 @@
             <span class="expires"></span>
           </div>
           <div class="deal-actions">
-            <button class="primary redeem" data-i18n="redeem">Redeem</button>
+            <button class="primary redeem" data-i18n="redeem">Get code</button>
             <button class="share" data-i18n="share">Share</button>
-            <button class="directions" data-i18n="directions">Directions</button>
+            <button class="directions" data-i18n="directions">Route</button>
           </div>
         </div>
       </article>

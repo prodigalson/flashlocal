@@ -435,7 +435,11 @@ function showRedemption(deal) {
 }
 
 function shareDeal(deal) {
-  const text = `${deal.business}: ${dealTitle(deal)} (${deal.discount})`;
+  const shareUrl = new URL(window.location.origin + window.location.pathname);
+  shareUrl.searchParams.set("deal", deal.id);
+  const text = state.language === "it"
+    ? `${deal.business}: ${dealTitle(deal)}\n${deal.discount}. Scade tra ${deal.expiresIn} min.\n${shareUrl.toString()}`
+    : `${deal.business}: ${dealTitle(deal)}\n${deal.discount}. Ends in ${deal.expiresIn} min.\n${shareUrl.toString()}`;
   const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
   window.location.href = url;
 }

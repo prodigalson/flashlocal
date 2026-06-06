@@ -59,6 +59,7 @@ Implemented today:
 - Map view
 - Sort controls
 - Deal cards with distance, expiry, category, discount, and actions
+- WhatsApp share text with URL preview metadata
 - English and Italian language toggle
 - Merchant workflow page
 - WhatsApp-style merchant assistant simulator
@@ -198,6 +199,56 @@ Copy rules:
 - Avoid backend/vendor terms in user-facing UI.
 - Keep AI provider names out of the product interface.
 - Prefer customer outcomes over internal implementation language.
+
+## WhatsApp Sharing
+
+Deal sharing is designed around WhatsApp link previews.
+
+When a customer taps `Share`, FlashLocal builds a WhatsApp message with:
+
+- Merchant name
+- Localized deal title
+- Discount or price
+- Time remaining
+- A FlashLocal URL with the deal ID in the query string
+
+Example English share text:
+
+```text
+Forno Rosso: 10 lunch menus left
+€8 menu. Ends in 34 min.
+https://flashlocal-six.vercel.app/?deal=1
+```
+
+Example Italian share text:
+
+```text
+Forno Rosso: 10 menu pranzo rimasti
+€8 menu. Scade tra 34 min.
+https://flashlocal-six.vercel.app/?deal=1
+```
+
+The URL provides the WhatsApp preview card through Open Graph tags:
+
+- `og:title`: `FlashLocal - Live nearby deals`
+- `og:description`: `Find last-minute local deals nearby. Open now, ending soon, ready to redeem.`
+- `og:image`: `https://flashlocal-six.vercel.app/whatsapp-preview.png`
+- `og:image:width`: `1200`
+- `og:image:height`: `630`
+- `og:url`: `https://flashlocal-six.vercel.app/`
+
+Current limitation:
+
+- This static prototype uses one site-level preview image, `whatsapp-preview.png`, for all deals.
+- Production should generate deal-specific share URLs and server-render deal-specific Open Graph metadata.
+
+Production recommendation:
+
+- Route shares through `/deal/:id`.
+- Server-render `og:title` as merchant plus deal title.
+- Server-render `og:description` as discount, expiry, and neighborhood.
+- Use merchant or category imagery where available.
+- Fall back to the FlashLocal branded preview image when deal imagery is missing.
 
 ## AI Layer
 

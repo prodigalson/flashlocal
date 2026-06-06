@@ -4,6 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>How FlashLocal Works</title>
+    <meta name="description" content="See how FlashLocal turns merchant WhatsApp messages into confirmed live local deals." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlashLocal" />
+    <meta property="og:title" content="How FlashLocal works" />
+    <meta property="og:description" content="Merchants post through WhatsApp. Customers see clean nearby deals." />
+    <meta property="og:url" content="https://flashlocal-six.vercel.app/how-it-works.html" />
+    <meta property="og:image" content="https://flashlocal-six.vercel.app/whatsapp-preview.png" />
+    <meta property="og:image:secure_url" content="https://flashlocal-six.vercel.app/whatsapp-preview.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="FlashLocal preview showing live local deals nearby." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="How FlashLocal works" />
+    <meta name="twitter:description" content="Merchants post through WhatsApp. Customers see clean nearby deals." />
+    <meta name="twitter:image" content="https://flashlocal-six.vercel.app/whatsapp-preview.png" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -63,20 +79,20 @@
               <div class="chat-window" id="chatWindow" aria-live="polite"></div>
               <form class="chat-form" id="chatForm">
                 <input id="chatInput" autocomplete="off" data-i18n-placeholder="chatPlaceholder" placeholder="Add 30% off pizza from 6pm to 8pm today" />
-                <button type="submit" data-i18n="send">Send</button>
+                <button type="submit" data-i18n="send">Preview</button>
               </form>
               <div class="quick-actions">
-                <button data-i18n="quickPizza" data-message="Add 30% off pizza from 6pm to 8pm today">Pizza</button>
-                <button data-i18n="quickLunch" data-message="We have 10 lunch menus left, 8 euro each until 3pm">Lunch</button>
-                <button data-i18n="quickExtend" data-message="Extend the aperitivo deal until 9pm">Extend</button>
-                <button data-i18n="quickPause" data-message="Pause my current deal">Pause</button>
+                <button data-i18n="quickPizza" data-message="Add 30% off pizza from 6pm to 8pm today">Pizza deal</button>
+                <button data-i18n="quickLunch" data-message="We have 10 lunch menus left, 8 euro each until 3pm">Lunch deal</button>
+                <button data-i18n="quickExtend" data-message="Extend the aperitivo deal until 9pm">Extend time</button>
+                <button data-i18n="quickPause" data-message="Pause my current deal">Pause deal</button>
               </div>
             </div>
 
             <aside class="structured-card">
               <p class="eyebrow" data-i18n="structured">Structured preview</p>
               <dl id="dealPreview"></dl>
-              <button id="publishDeal" data-i18n="publish">Publish deal</button>
+              <button id="publishDeal" data-i18n="publish">Go live</button>
             </aside>
           </div>
         </section>
