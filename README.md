@@ -2,7 +2,7 @@
 
 Mobile-first prototype for a local last-minute deals marketplace.
 
-FlashLocal lets consumers discover nearby time-sensitive offers and gives merchants a WhatsApp-style AI assistant, powered by the Voska AI API, for publishing deals quickly.
+FlashLocal lets consumers discover nearby time-sensitive offers and gives merchants a WhatsApp-style assistant for publishing deals quickly.
 
 ## What is built
 
@@ -11,7 +11,7 @@ FlashLocal lets consumers discover nearby time-sensitive offers and gives mercha
 - List view and map view
 - Deal cards with expiry, distance, discount, share, directions, and redeem actions
 - English and Italian UI toggle
-- Merchant WhatsApp-style Voska AI assistant simulator
+- Merchant WhatsApp-style assistant simulator
 - Structured deal preview before publishing
 - Publish flow that adds a new merchant deal to the live feed
 - Merchant onboarding status strip
