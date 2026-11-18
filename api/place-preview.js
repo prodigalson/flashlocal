@@ -13,7 +13,10 @@ const detailsFields = [
 function sendJson(response, statusCode, payload) {
   response.statusCode = statusCode;
   response.setHeader("Content-Type", "application/json");
-  response.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate=604800");
+  // Only successful lookups are worth caching; a cached failure would hide a fix for a day.
+  response.setHeader("Cache-Control", statusCode === 200 && !payload.error
+    ? "s-maxage=86400, stale-while-revalidate=604800"
+    : "no-store");
   response.end(JSON.stringify(payload));
 }
 
@@ -22,7 +25,15 @@ async function googleJson(url) {
   if (!response.ok) {
     throw new Error(`Google Places request failed with ${response.status}`);
   }
-  return response.json();
+  const data = await response.json();
+  // Google answers 200 even when it refuses the key, and says why in `status`.
+  if (data.status && data.status !== "OK" && data.status !== "ZERO_RESULTS") {
+    const refusal = new Error("Google Places refused the request");
+    refusal.googleStatus = String(data.status);
+    refusal.googleMessage = String(data.error_message || "");
+    throw refusal;
+  }
+  return data;
 }
 
 async function findPlaceId(query, key) {
@@ -106,6 +117,15 @@ module.exports = async function handler(request, response) {
       photo_url: await photoUrl(place.photos?.[0]?.photo_reference, key)
     });
   } catch (error) {
+    if (error.googleStatus) {
+      sendJson(response, 502, {
+        error: "google_places_refused",
+        google_status: error.googleStatus,
+        // The key never appears in Google's messages; strip it anyway.
+        google_message: error.googleMessage.split(key).join("[key]").slice(0, 300)
+      });
+      return;
+    }
     sendJson(response, 502, { error: "google_places_unavailable" });
   }
 };
