@@ -46,13 +46,22 @@ async function getPlaceDetails(placeId, key) {
   return data.result || null;
 }
 
-function photoUrl(photoReference, key) {
+// Google's photo endpoint needs the API key in its URL, so that URL must never
+// reach the browser. Ask Google where the image lives and return that address,
+// which carries no key.
+async function photoUrl(photoReference, key) {
   if (!photoReference) return "";
   const url = new URL("https://maps.googleapis.com/maps/api/place/photo");
   url.searchParams.set("maxwidth", "700");
   url.searchParams.set("photo_reference", photoReference);
   url.searchParams.set("key", key);
-  return url.toString();
+  try {
+    const response = await fetch(url, { redirect: "manual" });
+    const location = response.headers.get("location") || "";
+    return location.startsWith("https://") && !location.includes(key) ? location : "";
+  } catch (error) {
+    return "";
+  }
 }
 
 module.exports = async function handler(request, response) {
@@ -94,7 +103,7 @@ module.exports = async function handler(request, response) {
       user_ratings_total: place.user_ratings_total,
       open_now: place.opening_hours?.open_now,
       google_maps_url: place.url,
-      photo_url: photoUrl(place.photos?.[0]?.photo_reference, key)
+      photo_url: await photoUrl(place.photos?.[0]?.photo_reference, key)
     });
   } catch (error) {
     sendJson(response, 502, { error: "google_places_unavailable" });
